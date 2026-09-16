@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Your Cart')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<section class="section container">
+    <div class="section-title"><span>Your cart</span></div>
+
+    <div class="panel" th:if="${!items.isEmpty()}">
+        <table>
+            <thead>
+                <tr><th>Item</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.name}">Item</td>
+                    <td th:text="${'$' + #numbers.formatDecimal(item.price, 1, 2)}">$0.00</td>
+                    <td>
+                        <form th:action="@{/cart/update}" method="post" class="qty-form">
+                            <input type="hidden" name="productId" th:value="${item.productId}"/>
+                            <input type="number" name="quantity" min="1" th:value="${item.quantity}"/>
+                            <button type="submit" class="btn btn-secondary btn-small">Update</button>
+                        </form>
+                    </td>
+                    <td th:text="${'$' + #numbers.formatDecimal(item.subtotal, 1, 2)}">$0.00</td>
+                    <td>
+                        <form th:action="@{/cart/remove/{id}(id=${item.productId})}" method="post">
+                            <button type="submit" class="btn btn-danger btn-small">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3">Total</td>
+                    <td colspan="2" th:text="${'$' + #numbers.formatDecimal(total, 1, 2)}">$0.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top:22px;text-align:right;">
+            <a th:href="@{/checkout}" class="btn btn-primary">Proceed to checkout</a>
+        </div>
+    </div>
+
+    <div class="empty-state" th:if="${items.isEmpty()}">
+        <div class="emoji">🛒</div>
+        <p>Your cart is empty.</p>
+        <a th:href="@{/menu}" class="btn btn-primary" style="margin-top:12px;">Browse the menu</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head><title>fragments</title></head>
+<body>
+
+<div th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} + ' · FoodyWoody'">FoodyWoody</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</div>
+
+<nav class="navbar" th:fragment="navbar">
+    <div class="navbar-inner">
+        <a class="brand" th:href="@{/}">🍔 FoodyWoody</a>
+        <div class="nav-links">
+            <a th:href="@{/menu}">Menu</a>
+            <a th:href="@{/orders}" sec:authorize="isAuthenticated()">My Orders</a>
+            <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')">Admin</a>
+            <a th:href="@{/cart}" class="cart-link">
+                🛒 Cart
+                <span class="cart-badge" th:if="${cartItemCount != null and cartItemCount > 0}" th:text="${cartItemCount}">0</span>
+            </a>
+            <a th:href="@{/login}" sec:authorize="!isAuthenticated()" class="btn-pill-outline">Log in</a>
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+                <button type="submit" class="btn-pill-outline" style="background:none;cursor:pointer;">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<footer th:fragment="footer">
+    <div class="container">FoodyWoody &middot; a cleaner take on a Spring Boot food ordering app</div>
+</footer>
+
+</body>
+</html>
