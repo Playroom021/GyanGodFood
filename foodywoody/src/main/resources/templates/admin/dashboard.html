@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Admin')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<section class="section container">
+    <div class="section-title"><span>Admin dashboard</span></div>
+
+    <div class="admin-stats">
+        <div class="stat-card"><div class="num" th:text="${productCount}">0</div><div class="label">Products</div></div>
+        <div class="stat-card"><div class="num" th:text="${orderCount}">0</div><div class="label">Orders</div></div>
+        <div class="stat-card"><div class="num" th:text="${userCount}">0</div><div class="label">Registered users</div></div>
+    </div>
+
+    <div style="display:flex;gap:14px;">
+        <a th:href="@{/admin/products}" class="btn btn-primary">Manage products</a>
+        <a th:href="@{/admin/orders}" class="btn btn-secondary">Manage orders</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

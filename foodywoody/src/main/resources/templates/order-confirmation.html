@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Order Confirmed')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<section class="section container" style="max-width:640px;">
+    <div class="alert alert-success">Thanks! Your order has been placed.</div>
+
+    <div class="panel">
+        <p><strong>Order #<span th:text="${order.id}">1</span></strong>
+            &middot; <span class="badge" th:classappend="'badge-' + ${order.status}" th:text="${order.status}">PLACED</span>
+        </p>
+        <p style="color:var(--muted);" th:text="'Delivering to: ' + ${order.deliveryAddress}">Address</p>
+        <table style="margin-top:16px;">
+            <tbody>
+                <tr th:each="item : ${order.items}">
+                    <td th:text="${item.productName} + ' × ' + ${item.quantity}">Item</td>
+                    <td style="text-align:right;" th:text="${'$' + #numbers.formatDecimal(item.subtotal, 1, 2)}">$0.00</td>
+                </tr>
+                <tr class="total-row">
+                    <td>Total</td>
+                    <td style="text-align:right;" th:text="${'$' + #numbers.formatDecimal(order.totalAmount, 1, 2)}">$0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top:20px;">
+        <a th:href="@{/menu}" class="btn btn-secondary">Back to menu</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

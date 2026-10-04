@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Menu')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<section class="section container">
+    <div class="section-title"><span>Our menu</span></div>
+
+    <div class="category-pills">
+        <a th:href="@{/menu}" class="pill" th:classappend="${selectedCategory == null} ? 'active' : ''">All</a>
+        <a th:each="c : ${categories}" th:href="@{/menu(category=${c})}"
+           class="pill" th:classappend="${selectedCategory == c} ? 'active' : ''"
+           th:text="${c.icon} + ' ' + ${c.label}">Category</a>
+    </div>
+
+    <div class="grid" th:if="${!products.isEmpty()}">
+        <div class="card" th:each="p : ${products}">
+            <div class="card-emoji" th:text="${p.category.icon}">🍔</div>
+            <h3 th:text="${p.name}">Product</h3>
+            <p class="desc" th:text="${p.description}">Description</p>
+            <div class="card-footer">
+                <span class="price" th:text="${'$' + #numbers.formatDecimal(p.price, 1, 2)}">$0.00</span>
+                <form th:action="@{/cart/add}" method="post" class="add-form">
+                    <input type="hidden" name="productId" th:value="${p.id}"/>
+                    <input type="number" name="quantity" value="1" min="1" class="qty-input"/>
+                    <button type="submit" class="btn btn-primary btn-small">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="empty-state" th:if="${products.isEmpty()}">
+        <div class="emoji">🍽️</div>
+        <p>No items in this category right now.</p>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

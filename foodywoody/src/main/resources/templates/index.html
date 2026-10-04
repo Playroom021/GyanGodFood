@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Home')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<section class="hero">
+    <div class="hero-inner">
+        <div>
+            <h1>Good food,<br/>delivered with a smile.</h1>
+            <p>Fresh pizzas, juicy burgers, cool drinks and sweet treats &mdash; order in a couple of taps.</p>
+            <a th:href="@{/menu}" class="btn btn-primary">Browse the menu</a>
+        </div>
+        <div class="hero-emoji">🍕</div>
+    </div>
+</section>
+
+<section class="section container">
+    <div class="section-title">
+        <span>Popular picks</span>
+        <a th:href="@{/menu}" style="font-size:0.9rem;color:var(--primary);font-weight:600;">See full menu &rarr;</a>
+    </div>
+    <div class="grid">
+        <div class="card" th:each="p : ${featured}">
+            <div class="card-emoji" th:text="${p.category.icon}">🍔</div>
+            <h3 th:text="${p.name}">Product</h3>
+            <p class="desc" th:text="${p.description}">Description</p>
+            <div class="card-footer">
+                <span class="price" th:text="${'$' + #numbers.formatDecimal(p.price, 1, 2)}">$0.00</span>
+                <form th:action="@{/cart/add}" method="post" class="add-form">
+                    <input type="hidden" name="productId" th:value="${p.id}"/>
+                    <input type="hidden" name="quantity" value="1"/>
+                    <button type="submit" class="btn btn-primary btn-small">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

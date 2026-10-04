@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Manage Orders')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<section class="section container">
+    <div class="section-title"><span>Orders</span></div>
+
+    <div class="panel">
+        <table>
+            <thead><tr><th>Order</th><th>Customer</th><th>Placed</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr th:each="o : ${orders}">
+                    <td th:text="'#' + ${o.id}">#1</td>
+                    <td th:text="${o.user.fullName}">Name</td>
+                    <td th:text="${#temporals.format(o.placedAt, 'dd MMM, HH:mm')}">date</td>
+                    <td th:text="${'$' + #numbers.formatDecimal(o.totalAmount, 1, 2)}">$0.00</td>
+                    <td>
+                        <form th:action="@{/admin/orders/{id}/status(id=${o.id})}" method="post" class="qty-form">
+                            <select name="status" onchange="this.form.submit()">
+                                <option th:each="s : ${statuses}" th:value="${s}" th:selected="${s == o.status}" th:text="${s}"></option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

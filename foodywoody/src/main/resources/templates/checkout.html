@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(title='Checkout')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<section class="section container" style="max-width:640px;">
+    <div class="section-title"><span>Checkout</span></div>
+
+    <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <div class="panel" style="margin-bottom:22px;">
+        <table>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.name} + ' × ' + ${item.quantity}">Item</td>
+                    <td style="text-align:right;" th:text="${'$' + #numbers.formatDecimal(item.subtotal, 1, 2)}">$0.00</td>
+                </tr>
+                <tr class="total-row">
+                    <td>Total</td>
+                    <td style="text-align:right;" th:text="${'$' + #numbers.formatDecimal(total, 1, 2)}">$0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form class="panel" th:action="@{/checkout}" method="post">
+        <div class="field">
+            <label for="deliveryAddress">Delivery address</label>
+            <textarea id="deliveryAddress" name="deliveryAddress" rows="3" required></textarea>
+        </div>
+        <div class="field">
+            <label for="paymentMethod">Payment method</label>
+            <select id="paymentMethod" name="paymentMethod">
+                <option value="Cash on Delivery">Cash on delivery</option>
+                <option value="Card on Delivery">Card on delivery</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Place order</button>
+    </form>
+</section>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>
